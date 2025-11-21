@@ -3,8 +3,9 @@ package com.example.smartfridge;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,9 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView statusTextView, lastUpdateTextView;
     private CardView alcoholCard, ammoniaCard, weightCard, tempHumidityCard;
     private ProgressBar progressBar;
-    private Button logFirebaseButton; // NEW: button to trigger Firebase logging
 
-    // Firebase Realtime Database (no auth required in-app)
+    // Firebase (database only)
     private DatabaseReference mDatabase;
     private ValueEventListener valueEventListener;
 
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize Firebase Database reference
+        // Initialize Firebase database reference
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Initialize UI elements
@@ -81,15 +81,6 @@ public class MainActivity extends AppCompatActivity {
         statusTextView = findViewById(R.id.statusTextView);
         lastUpdateTextView = findViewById(R.id.lastUpdateTextView);
         progressBar = findViewById(R.id.progressBar);
-
-        // NEW: log Firebase button wiring
-        logFirebaseButton = findViewById(R.id.logFirebaseButton);
-        logFirebaseButton.setOnClickListener(v -> {
-            FirebaseTestUtility tester = new FirebaseTestUtility(MainActivity.this);
-            tester.logFirebaseConfig();
-            tester.runAllTests();
-            Toast.makeText(MainActivity.this, "Firebase tests started (check Logcat)", Toast.LENGTH_SHORT).show();
-        });
 
         // Set action bar title
         if (getSupportActionBar() != null) {
@@ -229,6 +220,36 @@ public class MainActivity extends AppCompatActivity {
             statusTextView.setText("✓ All systems normal");
             statusTextView.setTextColor(Color.parseColor("#4CAF50"));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_refresh) {
+            startDataListener();
+            Toast.makeText(this, "Refreshing data...", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (item.getItemId() == R.id.action_log_firebase) {
+            // Launch simple debug/log action: open FirebaseTestUtility to run tests
+            FirebaseTestUtility util = new FirebaseTestUtility(this);
+            util.runAllTests();
+            Toast.makeText(this, "Running Firebase tests (see Logcat)", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        // Previously signed out and returned to login. Now simply finish app or stop listener.
+        if (valueEventListener != null) {
+            mDatabase.child("sensors").child("currentReadings").removeEventListener(valueEventListener);
+        }
+        finish();
     }
 
     @Override
