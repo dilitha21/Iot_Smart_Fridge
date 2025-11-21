@@ -1,4 +1,4 @@
-SmartFridge
+## SmartFridge
 
 A simple Android app demonstrating a smart fridge prototype (Firebase-backed). This repository contains the Android app module and related Gradle configuration.
 
