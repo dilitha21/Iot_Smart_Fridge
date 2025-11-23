@@ -118,7 +118,9 @@ public class MainActivity extends AppCompatActivity {
             Double humidity = dataSnapshot.child("dht11/humidity").getValue(Double.class);
 
             if (temperature != null && humidity != null) {
-                tempTextView.setText(String.format(Locale.US, "%.1f°C", temperature));
+                // Show temperature and humidity together in the main temperature TextView
+                tempTextView.setText(String.format(Locale.US, "%.1f°C  •  %.0f%%", temperature, humidity));
+                // Keep the separate humidity TextView updated as well (small secondary label)
                 humidityTextView.setText(String.format(Locale.US, "%.0f%%", humidity));
 
                 // Check temperature range
@@ -191,9 +193,6 @@ public class MainActivity extends AppCompatActivity {
 
             // Update timestamp - removed action bar subtitle usage
 
-            // If no current status was set by alarms above, set a healthy message
-            setStatus("All systems normal");
-
         } catch (Exception e) {
             setStatus("Error parsing data");
             Log.e("MainActivity", "Error parsing data", e);
@@ -201,9 +200,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setStatus(String message) {
-        // Do not display status in action bar since action bar is hidden
-        // also show a brief Toast to make important alerts more visible
-        if (message != null && !message.isEmpty()) {
+        // Only show Toasts for non-normal statuses (alerts/warnings/errors).
+        // This prevents a frequent "All systems normal" popup from appearing.
+        if (message == null || message.isEmpty()) return;
+
+        String lower = message.toLowerCase(Locale.US);
+        boolean isAlert = lower.contains("alert") || lower.contains("warning") || lower.startsWith("error") || lower.contains("alert:");
+
+        if (isAlert) {
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
