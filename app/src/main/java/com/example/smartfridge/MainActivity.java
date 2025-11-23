@@ -1,8 +1,8 @@
 package com.example.smartfridge;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,8 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     // UI Elements
     private TextView tempTextView, humidityTextView, alcoholTextView, ammoniaTextView;
-    private TextView weightTextView, weightLossTextView, readingCountTextView;
-    private TextView statusTextView, lastUpdateTextView;
+    private TextView weightTextView, weightLossTextView;
     private CardView alcoholCard, ammoniaCard, weightCard, tempHumidityCard;
     private ProgressBar progressBar;
 
@@ -39,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Alert thresholds (matching your ESP32 code)
     private static final int ALCOHOL_THRESHOLD = 2200;
-    private static final int AMMONIA_THRESHOLD = 2000;
-    private static final double WEIGHT_LOSS_THRESHOLD = 5.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +74,11 @@ public class MainActivity extends AppCompatActivity {
         weightLossTextView = findViewById(R.id.weightLossTextView);
 
         // System
-        readingCountTextView = findViewById(R.id.readingCountTextView);
-        statusTextView = findViewById(R.id.statusTextView);
-        lastUpdateTextView = findViewById(R.id.lastUpdateTextView);
         progressBar = findViewById(R.id.progressBar);
 
-        // Set action bar title
+        // Hide the action bar entirely so the top black bar is removed
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Fridge IoT Monitor");
+            getSupportActionBar().hide();
         }
     }
 
@@ -99,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     updateUI(dataSnapshot);
                 } else {
-                    statusTextView.setText("No data available");
+                    setStatus("No data available");
                     Toast.makeText(MainActivity.this, "No sensor data found", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -107,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 progressBar.setVisibility(View.GONE);
-                statusTextView.setText("Error: " + databaseError.getMessage());
+                setStatus("Error: " + databaseError.getMessage());
                 Toast.makeText(MainActivity.this, "Database error: " + databaseError.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
@@ -140,13 +134,15 @@ public class MainActivity extends AppCompatActivity {
             Boolean alcoholAlarm = dataSnapshot.child("mq3/alcoholAlarm").getValue(Boolean.class);
 
             if (alcoholRaw != null) {
-                alcoholTextView.setText(String.format(Locale.US, "Raw: %.0f", alcoholRaw));
+                // Show readable label rather than technical name
+                alcoholTextView.setText(String.format(Locale.US, "%.0f", alcoholRaw));
 
                 if (alcoholAlarm != null && alcoholAlarm) {
                     alcoholCard.setCardBackgroundColor(Color.parseColor("#FF5252")); // Red alert
-                    alcoholTextView.setText(String.format(Locale.US, "⚠ SPOILAGE! Raw: %.0f", alcoholRaw));
+                    setStatus("ALERT: Alcohol/Spoilage detected");
                 } else if (alcoholRaw > ALCOHOL_THRESHOLD * 0.8) {
                     alcoholCard.setCardBackgroundColor(Color.parseColor("#FFEB3B")); // Yellow warning
+                    setStatus("Warning: Elevated alcohol level");
                 } else {
                     alcoholCard.setCardBackgroundColor(Color.WHITE);
                 }
@@ -157,11 +153,11 @@ public class MainActivity extends AppCompatActivity {
             Boolean ammoniaAlarm = dataSnapshot.child("mq135/ammoniaAlarm").getValue(Boolean.class);
 
             if (ammoniaRaw != null) {
-                ammoniaTextView.setText(String.format(Locale.US, "Raw: %.0f", ammoniaRaw));
+                ammoniaTextView.setText(String.format(Locale.US, "%.0f", ammoniaRaw));
 
                 if (ammoniaAlarm != null && ammoniaAlarm) {
                     ammoniaCard.setCardBackgroundColor(Color.parseColor("#FFC107")); // Amber warning
-                    ammoniaTextView.setText(String.format(Locale.US, "⚠ High! Raw: %.0f", ammoniaRaw));
+                    setStatus("Warning: High ammonia levels");
                 } else {
                     ammoniaCard.setCardBackgroundColor(Color.WHITE);
                 }
@@ -181,50 +177,45 @@ public class MainActivity extends AppCompatActivity {
 
                 if (isSpoiledByWeight != null && isSpoiledByWeight) {
                     weightCard.setCardBackgroundColor(Color.parseColor("#FF9800")); // Orange warning
-                    weightLossTextView.setText(String.format(Locale.US, "⚠ DEHYDRATED: %.1f%%", weightLossPercent));
+                    setStatus("Warning: Significant weight loss (dehydration)");
                 } else {
                     weightCard.setCardBackgroundColor(Color.WHITE);
                 }
             }
 
-            // System
+            // System reading count (optional) - removed action bar subtitle usage
             Long readingCount = dataSnapshot.child("system/readingCount").getValue(Long.class);
             if (readingCount != null) {
-                readingCountTextView.setText("Reading #" + readingCount);
+                // previously updated action bar subtitle; left intentionally empty
             }
 
-            // Update status
-            updateStatus(alcoholAlarm, ammoniaAlarm, isSpoiledByWeight);
+            // Update timestamp - removed action bar subtitle usage
 
-            // Update timestamp
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, HH:mm:ss", Locale.US);
-            lastUpdateTextView.setText("Last update: " + sdf.format(new Date()));
+            // If no current status was set by alarms above, set a healthy message
+            setStatus("All systems normal");
 
         } catch (Exception e) {
-            statusTextView.setText("Error parsing data: " + e.getMessage());
-            e.printStackTrace();
+            setStatus("Error parsing data");
+            Log.e("MainActivity", "Error parsing data", e);
         }
     }
 
-    private void updateStatus(Boolean alcoholAlarm, Boolean ammoniaAlarm, Boolean spoiledByWeight) {
-        if (alcoholAlarm != null && alcoholAlarm) {
-            statusTextView.setText("⚠️ ALERT: Food Spoilage Detected (Alcohol)!");
-            statusTextView.setTextColor(Color.RED);
-        } else if (spoiledByWeight != null && spoiledByWeight) {
-            statusTextView.setText("⚠️ WARNING: Food Dehydration Detected!");
-            statusTextView.setTextColor(Color.parseColor("#FF9800"));
-        } else if (ammoniaAlarm != null && ammoniaAlarm) {
-            statusTextView.setText("⚠️ WARNING: High Ammonia Levels!");
-            statusTextView.setTextColor(Color.parseColor("#FFC107"));
-        } else {
-            statusTextView.setText("✓ All systems normal");
-            statusTextView.setTextColor(Color.parseColor("#4CAF50"));
+    private void setStatus(String message) {
+        // Do not display status in action bar since action bar is hidden
+        // also show a brief Toast to make important alerts more visible
+        if (message != null && !message.isEmpty()) {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        // remove or hide log action if present
+        MenuItem logItem = menu.findItem(R.id.action_log_firebase);
+        if (logItem != null) {
+            logItem.setVisible(false);
+        }
         return true;
     }
 
@@ -234,22 +225,8 @@ public class MainActivity extends AppCompatActivity {
             startDataListener();
             Toast.makeText(this, "Refreshing data...", Toast.LENGTH_SHORT).show();
             return true;
-        } else if (item.getItemId() == R.id.action_log_firebase) {
-            // Launch simple debug/log action: open FirebaseTestUtility to run tests
-            FirebaseTestUtility util = new FirebaseTestUtility(this);
-            util.runAllTests();
-            Toast.makeText(this, "Running Firebase tests (see Logcat)", Toast.LENGTH_SHORT).show();
-            return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void logout() {
-        // Previously signed out and returned to login. Now simply finish app or stop listener.
-        if (valueEventListener != null) {
-            mDatabase.child("sensors").child("currentReadings").removeEventListener(valueEventListener);
-        }
-        finish();
     }
 
     @Override
