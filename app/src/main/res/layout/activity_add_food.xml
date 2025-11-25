@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food Management"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Food"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- big plus box (no real image yet) -->
+        <LinearLayout
+            android:id="@+id/layoutImagePicker"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:background="@android:color/darker_gray"
+            android:alpha="0.1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:textSize="40sp"
+                android:textColor="#00A8A8" />
+        </LinearLayout>
+
+        <!-- Name -->
+        <EditText
+            android:id="@+id/edtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:layout_marginTop="16dp" />
+
+        <!-- Category simple EditText (we can change to dropdown later) -->
+        <EditText
+            android:id="@+id/edtCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Category (Veg / Meat / Fruits / Drinks / Seasonings)"
+            android:layout_marginTop="12dp" />
+
+        <!-- Storage location -->
+        <EditText
+            android:id="@+id/edtShelf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Storage Location (Upper / Middle / Bottom)"
+            android:layout_marginTop="12dp" />
+
+        <!-- Producing date simple (yyyy-MM-dd)  -->
+        <EditText
+            android:id="@+id/edtProducing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Producing Date (yyyy-MM-dd)"
+            android:layout_marginTop="12dp" />
+
+        <!-- Expiry date -->
+        <EditText
+            android:id="@+id/edtExpiry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Expiry Date (yyyy-MM-dd)"
+            android:layout_marginTop="12dp" />
+
+        <!-- Weight -->
+        <EditText
+            android:id="@+id/edtWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Weight in grams"
+            android:inputType="numberDecimal"
+            android:layout_marginTop="12dp" />
+
+        <!-- Remark (optional) -->
+        <EditText
+            android:id="@+id/edtRemark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Remark (optional)"
+            android:layout_marginTop="12dp" />
+
+        <Button
+            android:id="@+id/btnSaveFood"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="OK"
+            android:textAllCaps="false"
+            android:background="#00A8A8"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</ScrollView>

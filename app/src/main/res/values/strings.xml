@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SmartFridge</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_log_firebase">Log Firebase</string>
+    <string name="menu_logout">Logout</string>
+    <string name="log_firebase_button">Log Firebase (view Logcat)</string>
+
+    <!-- Login screen strings -->
+    <string name="login_title">Fridge IoT Monitor</string>
+    <string name="login_subtitle">Login to Monitor Your Sensors</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_login">LOGIN</string>
+    <string name="btn_register">REGISTER NEW USER</string>
+
+    <!-- Main screen placeholders -->
+    <string name="connecting">Connecting...</string>
+    <string name="reading_count">Reading #0</string>
+    <string name="last_update">Last update: --</string>
+</resources>
