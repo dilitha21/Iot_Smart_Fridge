@@ -3,48 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f3f4f6">
+    android:background="#F8F9FA"> <!-- A lighter, modern background -->
 
-    <!-- center content, leave space top/bottom -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingTop="48dp"
-        android:paddingBottom="48dp"
+        android:padding="24dp"
         android:gravity="center">
 
-        <!-- Card style helper: white card with subtle shadow -->
+        <!-- Header -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fridge Monitor"
+            android:textSize="28sp"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textColor="#1F2937"
+            android:layout_marginBottom="24dp"/>
+
         <!-- Temperature and Humidity Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/tempHumidityCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
-            app:cardUseCompatPadding="true"
-            android:foreground="?attr/selectableItemBackground">
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@android:color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="12dp"
+                android:padding="16dp"
                 android:gravity="center_vertical">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="temp_icon"
-                    android:src="@android:drawable/ic_menu_compass"
-                    android:background="@drawable/icon_circle"
-                    android:padding="8dp"
-                    app:tint="#0369A1"
-                    android:layout_marginEnd="12dp"
-                    android:scaleType="centerInside" />
+                    android:contentDescription="Temperature and Humidity Icon"
+                    android:src="@drawable/ic_thermostat"
+                    android:background="@drawable/icon_background_blue"
+                    android:padding="10dp"
+                    app:tint="@color/white"
+                    android:layout_marginEnd="16dp"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -53,186 +56,151 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Temperature"
+                        android:text="Temperature &amp; Humidity"
+                        android:textSize="14sp"
                         android:fontFamily="sans-serif-medium"
-                        android:textSize="12sp"
-                        android:textColor="#64748B" />
+                        android:textColor="#4B5563" />
 
                     <TextView
                         android:id="@+id/temperatureTextView"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="--°C"
-                        android:fontFamily="sans-serif"
-                        android:textSize="22sp"
+                        android:textSize="24sp"
                         android:textStyle="bold"
-                        android:textColor="#0F172A"
+                        android:textColor="#111827"
                         android:layout_marginTop="4dp" />
 
-                    <!-- Humidity (added back to match MainActivity expectations) -->
                     <TextView
                         android:id="@+id/humidityTextView"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="--%"
-                        android:fontFamily="sans-serif"
-                        android:textSize="14sp"
-                        android:textColor="#64748B"
-                        android:layout_marginTop="6dp" />
-
+                        android:textSize="16sp"
+                        android:textColor="#374151"
+                        android:layout_marginTop="2dp" />
                 </LinearLayout>
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Alcohol Card -->
+        <!-- Gas Sensors Card -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/alcoholCard"
+            android:id="@+id/gasSensorsCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
-            app:cardUseCompatPadding="true"
-            android:foreground="?attr/selectableItemBackground">
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@android:color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:contentDescription="alcohol_icon"
-                    android:src="@android:drawable/ic_menu_info_details"
-                    android:background="@drawable/icon_circle"
-                    android:padding="8dp"
-                    app:tint="#0369A1"
-                    android:layout_marginEnd="12dp"
-                    android:scaleType="centerInside" />
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:contentDescription="Gas Sensors Icon"
+                        android:src="@drawable/ic_gas_meter"
+                        android:background="@drawable/icon_background_green"
+                        android:padding="10dp"
+                        app:tint="@color/white"
+                        android:layout_marginEnd="16dp"/>
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Alcohol level"
+                        android:text="Gas Levels"
+                        android:textSize="14sp"
                         android:fontFamily="sans-serif-medium"
-                        android:textSize="12sp"
-                        android:textColor="#64748B" />
+                        android:textColor="#4B5563" />
+                </LinearLayout>
 
+                <!-- Alcohol Level -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Alcohol"
+                        android:textColor="#374151"
+                        android:textSize="16sp"/>
                     <TextView
                         android:id="@+id/alcoholTextView"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="--"
-                        android:fontFamily="sans-serif"
-                        android:textSize="22sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#0F172A"
-                        android:layout_marginTop="4dp" />
-
+                        android:textColor="#111827" />
                 </LinearLayout>
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Ammonia Card -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/ammoniaCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
-            app:cardUseCompatPadding="true"
-            android:foreground="?attr/selectableItemBackground">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:contentDescription="ammonia_icon"
-                    android:src="@android:drawable/ic_menu_search"
-                    android:background="@drawable/icon_circle"
-                    android:padding="8dp"
-                    app:tint="#0369A1"
-                    android:layout_marginEnd="12dp"
-                    android:scaleType="centerInside" />
-
+                <!-- Ammonia Level -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical">
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="Ammonia level"
-                        android:fontFamily="sans-serif-medium"
-                        android:textSize="12sp"
-                        android:textColor="#64748B" />
-
+                        android:text="Ammonia"
+                        android:textColor="#374151"
+                        android:textSize="16sp"/>
                     <TextView
                         android:id="@+id/ammoniaTextView"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="--"
-                        android:fontFamily="sans-serif"
-                        android:textSize="22sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#0F172A"
-                        android:layout_marginTop="4dp" />
-
+                        android:textColor="#111827" />
                 </LinearLayout>
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
 
         <!-- Weight Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/weightCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="6dp"
-            app:cardUseCompatPadding="true"
-            android:foreground="?attr/selectableItemBackground">
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@android:color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="12dp"
+                android:padding="16dp"
                 android:gravity="center_vertical">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="weight_icon"
-                    android:src="@android:drawable/ic_menu_myplaces"
-                    android:background="@drawable/icon_circle"
-                    android:padding="8dp"
-                    app:tint="#0369A1"
-                    android:layout_marginEnd="12dp"
-                    android:scaleType="centerInside" />
+                    android:contentDescription="Weight Icon"
+                    android:src="@drawable/ic_scale"
+                    android:background="@drawable/icon_background_purple"
+                    android:padding="10dp"
+                    app:tint="@color/white"
+                    android:layout_marginEnd="16dp"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -241,46 +209,42 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Weight"
+                        android:textSize="14sp"
                         android:fontFamily="sans-serif-medium"
-                        android:textSize="12sp"
-                        android:textColor="#64748B" />
+                        android:textColor="#4B5563" />
 
                     <TextView
                         android:id="@+id/weightTextView"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="-- g"
-                        android:fontFamily="sans-serif"
-                        android:textSize="22sp"
+                        android:textSize="24sp"
                         android:textStyle="bold"
-                        android:textColor="#0F172A"
+                        android:textColor="#111827"
                         android:layout_marginTop="4dp" />
 
                     <TextView
                         android:id="@+id/weightLossTextView"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Loss: --%"
-                        android:fontFamily="sans-serif"
-                        android:textSize="12sp"
-                        android:textColor="#64748B"
-                        android:layout_marginTop="4dp" />
-
+                        android:textSize="16sp"
+                        android:textColor="#374151"
+                        android:layout_marginTop="2dp" />
                 </LinearLayout>
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Minimal progress indicator -->
         <ProgressBar
             android:id="@+id/progressBar"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            android:indeterminateTint="#4F46E5"/>
 
     </LinearLayout>
 </ScrollView>
